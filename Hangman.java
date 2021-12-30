@@ -1,8 +1,13 @@
+import java.util.Random;
+import java.io.*;
+
 class Hangman {
    public static void main(String[] args) {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      Random random = new Random();
       boolean won = false;
       String[] words = { "bomb", "toast", "communication", "sail", "highway", "prestige", "fair", "shock", "grass", "despair", "faithful", "crossing", "well", "headline", "assembly", "picture" };
-      String word = words[Random.randint(0, 4)];
+      String word = words[random.nextInt(words.length - 1)];
       int guesses = 0;
       int wrongTries = 0;
       char[] guessStatus = new char[word.length()];
@@ -11,7 +16,7 @@ class Hangman {
       }
       String[] hangmen = { "", "________\n|      |", " |\n |\n |\n |\n |\n_L______\n|      |", " ____\n |\n |\n |\n |\n |\n |\n_L______\n|      |", " ____\n |/\n |\n |\n |\n |\n |\n_L______\n|      |", " ____\n |/  |\n |\n |\n |\n |\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |\n |\n |\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |   |\n |   |\n |\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |   |\n |   |\n |  /\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |   |\n |   |\n |  / \\\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |  \\|\n |   |\n |  / \\\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |  \\|/\n |   |\n |  / \\\n_L______\n|      |" };
       while(!won) {
-         SystemTools.clearScreen();
+         //SystemTools.clearScreen();
          System.out.println(hangmen[wrongTries]);
          for(int i = 0; i < word.length(); i++) {
             System.out.print(guessStatus[i]);
@@ -19,10 +24,17 @@ class Hangman {
          }
          System.out.println();
          System.out.println();
-         String input = (Input.readString("Guess: ")).toLowerCase();
+         System.out.print("Guess: ");
+         String input = "";
+         try{
+           input = br.readLine().toLowerCase();
+        } catch(IOException e){
+           e.printStackTrace();
+           System.exit(1);
+        }
          if(input.equalsIgnoreCase(word)) {
             won = true;
-         }else if(stringContains(word.toLowerCase(), input)) {
+         }else if(word.toLowerCase().contains(input)) {
             char[] characters = new char[input.length()];
             for(int i = 0; i < input.length(); i++) {
                characters[i] = input.charAt(i);
@@ -37,7 +49,7 @@ class Hangman {
          } else{
             wrongTries++;
          }
-         if(charToString(guessStatus).equals(word.toLowerCase())) {
+         if((new String(guessStatus)).equals(word.toLowerCase())) {
             System.out.println("dfg");
             won = true;
          }else if(wrongTries >= hangmen.length - 1) {
@@ -46,23 +58,19 @@ class Hangman {
          guesses++;
       }
       if(won) {
-         SystemTools.clearScreen();
+         //SystemTools.clearScreen();
          System.out.println("You won!");
          System.out.println(guesses + " guess(es)");
       }else{
-         SystemTools.clearScreen();
+         //SystemTools.clearScreen();
          System.out.println(hangmen[wrongTries]);
          System.out.println("You lost!");
          System.out.println("The word was: " + word);
       }
    }
 
-   static boolean stringContains(String word1, String word2) {
-      return word1.indexOf(word2.toLowerCase()) != -1;
-   }
-
    static int[] positionsOfChar(String word, char charToGetPosition) {
-      char[] characters = stringToChar(word);
+      char[] characters = word.toCharArray();
       int[] outputUnformatted = new int[word.length()];
       int pos = 0;
       for(int i = 0; i < word.length(); i++) {
@@ -74,22 +82,6 @@ class Hangman {
       int[] output = new int[pos];
       for(int i = 0; i < pos; i++) {
          output[i] = outputUnformatted[i];
-      }
-      return output;
-   }
-   
-   static char[] stringToChar(String input) {
-      char[] characters = new char[input.length()];
-      for(int i = 0; i < input.length(); i++) {
-         characters[i] = input.charAt(i);
-      }
-      return characters;
-   }
-
-   static String charToString(char[] input) {
-      String output = "";
-      for(int i = 0; i < input.length; i++) {
-         output += input[i];
       }
       return output;
    }
