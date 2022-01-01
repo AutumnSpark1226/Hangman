@@ -16,7 +16,7 @@ class Hangman {
       }
       String[] hangmen = { "", "________\n|      |", " |\n |\n |\n |\n |\n_L______\n|      |", " ____\n |\n |\n |\n |\n |\n |\n_L______\n|      |", " ____\n |/\n |\n |\n |\n |\n |\n_L______\n|      |", " ____\n |/  |\n |\n |\n |\n |\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |\n |\n |\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |   |\n |   |\n |\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |   |\n |   |\n |  /\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |   |\n |   |\n |  / \\\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |  \\|\n |   |\n |  / \\\n |\n_L______\n|      |", " ____\n |/  |\n |   O\n |  \\|/\n |   |\n |  / \\\n_L______\n|      |" };
       while(!won) {
-         //SystemTools.clearScreen();
+         clearScreen();
          System.out.println(hangmen[wrongTries]);
          for(int i = 0; i < word.length(); i++) {
             System.out.print(guessStatus[i]);
@@ -58,11 +58,11 @@ class Hangman {
          guesses++;
       }
       if(won) {
-         //SystemTools.clearScreen();
+         clearScreen();
          System.out.println("You won!");
          System.out.println(guesses + " guess(es)");
       }else{
-         //SystemTools.clearScreen();
+         clearScreen();
          System.out.println(hangmen[wrongTries]);
          System.out.println("You lost!");
          System.out.println("The word was: " + word);
@@ -84,5 +84,10 @@ class Hangman {
          output[i] = outputUnformatted[i];
       }
       return output;
+   }
+
+   public static void clearScreen(){
+     System.out.print("\033[H\033[2J");
+     System.out.flush();
    }
 }
